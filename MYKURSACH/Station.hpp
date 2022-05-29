@@ -44,6 +44,8 @@ public:
 	Station	*getPrev();
 	void	setPrev(Station *prev);
 
+	void	writeToFile(std::ofstream& outfile, int number);
+
 };
 
 #endif /* STATION_HPP_ */

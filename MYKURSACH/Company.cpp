@@ -112,54 +112,45 @@ bool	Company::addStation(int number)
 
 bool	Company::delStation(int number)
 {
-	if (isStationPresent(number))
+	Station *tmp = head->getNext();
+	while (tmp != head)
 	{
-		Station *tmp = head->getNext();
-		while (tmp != head)
+		if (tmp->getNumber() == number)
 		{
-			if (tmp->getNumber() == number)
-			{
-				tmp->getPrev()->setNext(tmp->getNext());
-				tmp->getNext()->setPrev(tmp->getPrev());
-				delete (tmp);
-				return (true);
-			}
-			tmp = tmp->getNext();
+			tmp->getPrev()->setNext(tmp->getNext());
+			tmp->getNext()->setPrev(tmp->getPrev());
+			delete (tmp);
+			return (true);
 		}
+		tmp = tmp->getNext();
 	}
 	return (false);
 }
 
 bool	Company::addPump(int stationNumber, int pumpNumber, std::string brand)
 {
-	if (isStationPresent(stationNumber))
+	Station *tmp = head->getNext();
+	while (tmp != head)
 	{
-		Station *tmp = head->getNext();
-		while (tmp != head)
-		{
-			if (tmp->getNumber() == stationNumber)
-				return (tmp->addPump(pumpNumber, brand));
-			tmp = tmp->getNext();
-		}
+		if (tmp->getNumber() == stationNumber)
+			return (tmp->addPump(pumpNumber, brand));
+		tmp = tmp->getNext();
 	}
 	return (false);
 }
 
 bool	Company::delPump(int stationNumber)
 {
-	if (isStationPresent(stationNumber))
+	Station *tmp = head->getNext();
+	while (tmp != head)
 	{
-		Station *tmp = head->getNext();
-		while (tmp != head)
+		if (tmp->getNumber() == stationNumber)
 		{
-			if (tmp->getNumber() == stationNumber)
-			{
-				if (!tmp->delPump())
-					return (false);
-				return (true);
-			}
-			tmp = tmp->getNext();
+			if (!tmp->delPump())
+				return (false);
+			return (true);
 		}
+		tmp = tmp->getNext();
 	}
 	return (false);
 }
@@ -176,6 +167,16 @@ void Company::show()
 			std::cout << "\n";
 			tmp = tmp->getNext();
 		}
+	}
+}
+
+void	Company::writeToFile(std::ofstream& outfile)
+{
+	Station *tmp = head->getNext();
+	while (tmp != head)
+	{
+		tmp->writeToFile(outfile, tmp->getNumber());
+		tmp = tmp->getNext();
 	}
 }
 
@@ -252,54 +253,45 @@ bool	Company::_addStation(int number)
 
 bool	Company::_delStation(int number)
 {
-	if (isStationPresent(number))
+	Station *tmp = head->getPrev();
+	while (tmp != head)
 	{
-		Station *tmp = head->getPrev();
-		while (tmp != head)
+		if (tmp->getNumber() == number)
 		{
-			if (tmp->getNumber() == number)
-			{
-				tmp->getPrev()->setNext(tmp->getNext());
-				tmp->getNext()->setPrev(tmp->getPrev());
-				delete (tmp);
-				return (true);
-			}
-			tmp = tmp->getPrev();
+			tmp->getPrev()->setNext(tmp->getNext());
+			tmp->getNext()->setPrev(tmp->getPrev());
+			delete (tmp);
+			return (true);
 		}
+		tmp = tmp->getPrev();
 	}
 	return (false);
 }
 
 bool	Company::_addPump(int stationNumber, int pumpNumber, std::string brand)
 {
-	if (_isStationPresent(stationNumber))
+	Station *tmp = head->getPrev();
+	while (tmp != head)
 	{
-		Station *tmp = head->getPrev();
-		while (tmp != head)
-		{
-			if (tmp->getNumber() == stationNumber)
-				return (tmp->addPump(pumpNumber, brand));
-			tmp = tmp->getPrev();
-		}
+		if (tmp->getNumber() == stationNumber)
+			return (tmp->addPump(pumpNumber, brand));
+		tmp = tmp->getPrev();
 	}
 	return (false);
 }
 
 bool	Company::_delPump(int stationNumber)
 {
-	if (_isStationPresent(stationNumber))
+	Station *tmp = head->getPrev();
+	while (tmp != head)
 	{
-		Station *tmp = head->getPrev();
-		while (tmp != head)
+		if (tmp->getNumber() == stationNumber)
 		{
-			if (tmp->getNumber() == stationNumber)
-			{
-				if (!tmp->delPump())
-					return (false);
-				return (true);
-			}
-			tmp = tmp->getPrev();
+			if (!tmp->delPump())
+				return (false);
+			return (true);
 		}
+		tmp = tmp->getPrev();
 	}
 	return (false);
 }

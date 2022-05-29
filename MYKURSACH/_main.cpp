@@ -5,7 +5,18 @@ Company *comp = new Company();
 
 int getNumber() {
 	int number;
-	while (!(std::cin >> number) || (std::cin.peek() != '\n'))
+	while (!(std::cin >> number) || (std::cin.peek() != '\n') || number < 0)
+	{
+		std::cin.clear();
+		while (std::cin.get() != '\n');
+		std::cout << "Ошибка ввода. Повторите: ";
+	}
+	return (number);
+}
+
+int getMode() {
+	int number;
+	while (!(std::cin >> number) || (std::cin.peek() != '\n') || (number != 0 && number != 1))
 	{
 		std::cin.clear();
 		while (std::cin.get() != '\n');
@@ -23,7 +34,7 @@ void Add()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	if (mode == FORWARD && !comp->addStation(number))
 	{
@@ -51,13 +62,15 @@ void AddQ()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	std::cout << "Введите номер бензоколонки: ";
 	number1 = getNumber();
 
 	std::cout << "Введите марку безина: ";
-	std::cin >> fuel;
+	std::cin.ignore(123456, '\n');
+	std::getline(std::cin, fuel);
+	//std::cin >> fuel;
 
 	if (mode == FORWARD && !comp->addPump(number, number1, fuel))
 	{
@@ -82,7 +95,7 @@ void Del()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	if (mode == FORWARD && !comp->delStation(number))
 	{
@@ -108,7 +121,7 @@ void DelQ()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	if (mode == FORWARD && !comp->delPump(number))
 	{
@@ -134,7 +147,7 @@ void Find()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	if (mode == FORWARD && !comp->isStationPresent(number))
 	{
@@ -160,7 +173,7 @@ void FindQ()
 	number = getNumber();
 
 	std::cout << "Проход по списку прямой(0)/обратный(1):";
-	mode = getNumber();
+	mode = getMode();
 
 	std::cout << "Введите номер бензоколонки: ";
 	number1 = getNumber();
@@ -180,12 +193,114 @@ void FindQ()
 	std::cout << "Бензоколонка найдена!\n";
 
 }
+
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it))
+    	++it;
+    return !s.empty() && it == s.end();
+}
+
+bool loadFile(Company *company)
+{
+	std::ifstream infile;
+	infile.open(FILE_PATH);
+	if (!infile.is_open())
+	{
+		std::cout << "Ошибка при открытии файла.\n";
+		return (false);
+	}
+
+	int currentLine = 0;
+	std::string line;
+	while (getline(infile, line))
+	{
+		if (currentLine == 0)
+			company->setName(line);
+		else
+		{
+			int currentParam = 0;
+			std::istringstream stream(line);
+			std::string argument;
+
+			std::string stationNumber;
+			std::string pumpNumber;
+			std::string pumpBrand;
+
+			while (getline(stream, argument, ';'))
+			{
+				if (currentParam == 0)
+				{
+					if (!is_number(argument))
+					{
+						std::cout << "Аргумент должен быть числом (строка "
+								<< currentLine << " аргумент " << currentParam << ")" << std::endl;
+						return (false);
+					}
+					stationNumber = argument;
+				}
+				else if (currentParam == 1)
+				{
+					if (!is_number(argument))
+					{
+						std::cout << "Аргумент должен быть числом (строка "
+								<< currentLine << " аргумент " << currentParam << ")" << std::endl;
+						return (false);
+					}
+
+					pumpNumber = argument;
+				}
+				else if (currentParam == 2)
+					pumpBrand = argument;
+				currentParam++;
+			}
+
+			if (!(currentParam == 1 || currentParam == 3))
+			{
+				std::cout << "Неправильное количество аргументов на строке " << currentLine
+						<< " в аргументе №: " << currentParam << std::endl;
+				return (false);
+			}
+
+			if (currentParam == 1)
+				company->addStation(std::stoi(stationNumber));
+
+			else if (currentParam == 3)
+			{
+				company->addStation(std::stoi(stationNumber));
+				company->addPump(std::stoi(stationNumber), std::stoi(pumpNumber), pumpBrand);
+			}
+		}
+		currentLine++;
+	}
+
+	return (true);
+}
+
+bool exportFile(Company *company)
+{
+	std::ofstream outfile;
+
+	outfile.open(FILE_PATH);
+	if (!outfile.is_open())
+	{
+		std::cout << "Ошибка при открытии файла.\n";
+		return (false);
+	}
+	outfile << "\xEF\xBB\xBF";
+	outfile << company->getName() << std::endl;
+	company->writeToFile(outfile);
+	std::cout << "Выгружено.\n";
+	return (true);
+}
+
 void Show()
 {
 	{
 		int mode;
-		std::cout << "\nПроход по списку прямой(0)/обратный(1):";
-		mode = getNumber();
+		std::cout << "Проход по списку прямой(0)/обратный(1):";
+		mode = getMode();
 		system("clear");
 		std::cout << "\n----------------------------------------------------\n";
 		std::cout << "|        Бензиновая компания '" << comp->getName() << "'";
@@ -245,28 +360,16 @@ int main() {
 		}
 		else if (n == 9)
 		{
-//			delete(comp);
-//			comp = new Company();
-//			if (file.InputData(comp)) std::cout << "Загрузка успешна!";
-//			else
-//			{
-//				std::cout << "Ошибка!";
-//				delete(comp);
-//				comp = new Company();
-//			}
+			delete(comp);
+			comp = new Company();
+			if (!loadFile(comp))
+			{
+				delete(comp);
+				comp = new Company();
+			}
 		}
 		else if (n == 10)
-		{
-//			if (comp != NULL)
-//			{
-//				if (file.OutputData(comp))
-//					std::cout << "Выгрузка успешна!";
-//				else
-//					std::cout << "Ошибка";
-//			}
-//			else
-//				std::cout << "Ошибка!";
-		}
+			exportFile(comp);
 		else if (n == 0)
 		{
 			delete(comp);

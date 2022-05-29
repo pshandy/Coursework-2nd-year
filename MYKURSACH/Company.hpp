@@ -48,6 +48,7 @@ public:
 	void	show();
 	void	_show();
 
+	void	writeToFile(std::ofstream& outfile);
 
 	std::string	getName();
 	void		setName(std::string name);

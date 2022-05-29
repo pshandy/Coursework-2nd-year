@@ -14,5 +14,8 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
+
+#define FILE_PATH "config.txt"
 
 #endif /* PROGRAM_HPP_ */

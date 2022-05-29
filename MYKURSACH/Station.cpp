@@ -92,6 +92,21 @@ void Station::show()
 	}
 }
 
+void	Station::writeToFile(std::ofstream& outfile, int number)
+{
+	Pump* tmp = head->getNext();
+	if (tmp == NULL)
+		outfile << number << ";" << std::endl;
+	while (tmp != NULL)
+	{
+		outfile << number << ";"
+				<< tmp->getNumber() << ";"
+				<< tmp->getBrand() << ";"
+				<< std::endl;
+		tmp = tmp->getNext();
+	}
+}
+
 Station::~Station()
 {
 	Pump *next;
