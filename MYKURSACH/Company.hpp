@@ -45,6 +45,9 @@ public:
 	bool	delPump(int stationNumber);
 	bool	_delPump(int stationNumber);
 
+	void	showStation(int stationNumber);
+	void	showPump(int stationNumber, int pumpNumber);
+
 	void	show();
 	void	_show();
 

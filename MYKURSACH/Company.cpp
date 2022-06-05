@@ -9,22 +9,17 @@
 
 Company::Company()
 {
-
 	head = new Station();
 	head->setNext(head);
 	head->setPrev(head);
-
 	name = "";
-
 }
 
 Company::Company(std::string name)
 {
-
 	head = new Station();
 	head->setNext(head);
 	head->setPrev(head);
-
 	this->name = name;
 }
 
@@ -78,10 +73,8 @@ bool	Company::isPumpInStationPresent(int stationNumber, int number)
 
 bool	Company::addStation(int number)
 {
-
 	Station *tmp = head->getNext();
 	Station *newStation = new Station(number);
-
 	while (tmp != head)
 	{
 
@@ -102,7 +95,6 @@ bool	Company::addStation(int number)
 		tmp = tmp->getNext();
 
 	}
-
 	newStation->setNext(head);
 	newStation->setPrev(head->getPrev());
 	head->getPrev()->setNext(newStation);
@@ -222,7 +214,6 @@ bool	Company::_isPumpInStationPresent(int stationNumber, int number)
 
 bool	Company::_addStation(int number)
 {
-
 	Station *tmp = head->getPrev();
 	Station *newStation = new Station(number);
 
@@ -294,6 +285,35 @@ bool	Company::_delPump(int stationNumber)
 		tmp = tmp->getPrev();
 	}
 	return (false);
+}
+
+void Company::showStation(int stationNumber) {
+	Station *tmp = head->getNext();
+	while (tmp != head)
+	{
+		if (tmp->getNumber() == stationNumber)
+		{
+			std::cout << "----------------------------------------------------\n";
+			std::cout << "|" << std::setw(8) << tmp->getNumber() << std::setw(8) << "|";
+			tmp->show();
+			std::cout << "\n";
+			return ;
+		}
+		tmp = tmp->getNext();
+	}
+}
+
+void Company::showPump(int stationNumber, int pumpNumber) {
+	Station *tmp = head->getNext();
+	while (tmp != head)
+	{
+		if (tmp->getNumber() == stationNumber)
+		{
+			tmp->showPump(pumpNumber);
+			return ;
+		}
+		tmp = tmp->getNext();
+	}
 }
 
 std::string	Company::getName()

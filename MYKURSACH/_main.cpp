@@ -162,6 +162,7 @@ void Find()
 	}
 
 	std::cout << "Заправка найдена!\n";
+	comp->showStation(number);
 }
 void FindQ()
 {
@@ -191,6 +192,7 @@ void FindQ()
 	}
 
 	std::cout << "Бензоколонка найдена!\n";
+	comp->showPump(number, number1);
 
 }
 
@@ -315,12 +317,30 @@ void Show()
 	}
 }
 
+void ShowMode(int mode)
+{
+	{
+		system("clear");
+		std::cout << "\n----------------------------------------------------\n";
+		std::cout << "|        Бензиновая компания '" << comp->getName() << "'";
+		std::cout << "\n----------------------------------------------------";
+		std::cout << "\n|     Номер     |" << "         Номер           Марка          ";
+		std::cout << "\n| автозаправки  |" << "      бензоколонки      бензина         \n";
+		if (mode == FORWARD)
+			comp->show();
+		else if (mode == BACKWARD)
+			comp->_show();
+		std::cout << "----------------------------------------------------\n";
+	}
+}
+
 int main() {
 	//SetConsoleCP(1251);
 	//SetConsoleOutputCP(1251);
 	int n;
+	int mode = FORWARD;
 	while (true) {
-		Show();
+		ShowMode(mode);
 		std::cout << "\n Выберите действие:\n";
 		std::cout << " 1. Добавить автозаправку\n";
 		std::cout << " 2. Добавить бензоколонку\n";
@@ -332,6 +352,8 @@ int main() {
 		std::cout << " 8. Удалить бензиновую компанию и создать пустую\n";
 		std::cout << " 9. Загрузить бензиновую компанию из файла\n";
 		std::cout << " 10. Выгрузить бензиновую компанию в файл\n";
+		std::cout << " 11. Вывод в прямом направлении.\n";
+		std::cout << " 12. Вывод в обратном направлении.\n";
 		std::cout << " 0. Выход\n";
 		n = getNumber();
 		if (n == 1)
@@ -370,11 +392,18 @@ int main() {
 		}
 		else if (n == 10)
 			exportFile(comp);
+		else if (n == 11)
+			mode = FORWARD;
+		else if (n == 12)
+			mode = BACKWARD;
 		else if (n == 0)
 		{
 			delete(comp);
 			break;
 		}
+		std::cin.ignore();
+		std::cout << "Нажмите чтобы продолжить." << std::endl;
+		std::cin.ignore();
 	}
 }
 

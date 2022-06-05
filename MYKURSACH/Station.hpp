@@ -38,6 +38,8 @@ public:
 	int		getNumber();
 	void	setNumber(int number);
 
+	void	showPump(int number);
+
 	Station	*getNext();
 	void	setNext(Station *next);
 
