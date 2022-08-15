@@ -15,6 +15,6 @@
 - Именование типов, структур и их полей, классов и их свойств, методов в соответствии с конкретной информационной задачей.
 - Наличие демо-модуля с удобным пользовательским оконным интерфейсом.
 ## Структура
-![Взаимодействие классов](https://github.com/pshandy/Coursework-2nd-year/raw/master/demo/Interface.png)
+![Взаимодействие классов](https://github.com/pshandy/Coursework-2nd-year/raw/master/demo/Structure.png)
 ## Интерфейс
-![Иллюстрация к проекту](https://github.com/pshandy/Coursework-2nd-year/tree/master/demo/Interface.png)
+![Пользовательский интерфейс](https://github.com/pshandy/Coursework-2nd-year/raw/master/demo/Interface.png)
